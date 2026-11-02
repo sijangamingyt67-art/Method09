@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gmail Generator Pro</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #0b0f19;
+            color: #e2e8f0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Glass Card Base */
+        .glass-card {
+            background: rgba(17, 24, 39, 0.85);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        }
+
+        /* Login Modal */
+        #loginSection {
+            position: fixed;
+            inset: 0;
+            background-color: #0b0f19;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+            z-index: 100;
+        }
+
+        .login-box {
+            max-width: 400px;
+            width: 100%;
+            padding: 32px;
+            text-align: center;
+        }
+
+        .lock-icon {
+            width: 60px;
+            height: 60px;
+            background: rgba(59, 130, 246, 0.15);
+            color: #3b82f6;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 16px;
+            font-size: 24px;
+            border: 1px solid rgba(59, 130, 246, 0.3);
+        }
+
+        /* Inputs & Buttons */
+        .input-field {
+            width: 100%;
+            background: #111827;
+            border: 1px solid #374151;
+            border-radius: 10px;
+            padding: 12px;
+            color: #fff;
+            font-size: 15px;
+            outline: none;
+            margin-top: 6px;
+            transition: 0.2s;
+        }
+
+        .input-field:focus {
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+        }
+
+        .btn-primary {
+            width: 100%;
+            background: linear-gradient(135deg, #2563eb, #4f46e5);
+            color: #fff;
+            font-weight: 600;
+            padding: 12px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            margin-top: 16px;
+            font-size: 15px;
+            transition: 0.2s;
+        }
+
+        .btn-primary:hover {
+            opacity: 0.9;
+        }
+
+        /* Header */
+        header {
+            border-bottom: 1px solid #1f2937;
+            background: rgba(17, 24, 39, 0.5);
+            padding: 16px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo-title {
+            font-size: 20px;
+            font-weight: bold;
+            color: #60a5fa;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .badge {
+            background: rgba(16, 185, 129, 0.1);
+            color: #10b981;
+            font-size: 12px;
+            padding: 4px 12px;
+            border-radius: 20px;
+            border: 1px solid rgba(16, 185, 129, 0.2);
+        }
+
+        /* Layout */
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 24px 16px;
+            width: 100%;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 24px;
+        }
+
+        @media (min-width: 768px) {
+            .container {
+                grid-template-columns: 1fr 1.2fr;
+            }
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        label {
+            font-size: 12px;
+            color: #9ca3af;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 600;
+        }
+
+        .radio-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 6px;
+        }
+
+        .radio-label {
+            background: #111827;
+            border: 1px solid #374151;
+            padding: 10px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        /* Output Area */
+        .output-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .btn-sec {
+            background: #1f2937;
+            color: #e5e7eb;
+            border: 1px solid #374151;
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 12px;
+            cursor: pointer;
+        }
+
+        .btn-sec:hover {
+            background: #374151;
+        }
+
+        textarea {
+            width: 100%;
+            height: 350px;
+            background: #0d1322;
+            border: 1px solid #1f2937;
+            border-radius: 10px;
+            padding: 14px;
+            color: #34d399;
+            font-family: monospace;
+            font-size: 13px;
+            resize: none;
+            outline: none;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- LOGIN LOCK -->
+    <div id="loginSection">
+        <div class="glass-card login-box">
+            <div class="lock-icon">🔒</div>
+            <h2 style="color: #fff; margin-bottom: 6px;">Password Din</h2>
+            <p style="color: #9ca3af; font-size: 13px; margin-bottom: 20px;">Tool ti use korar jonno password din</p>
+            
+            <input type="password" id="passcodeInput" placeholder="Enter Passcode" class="input-field" style="text-align: center; font-size: 18px; letter-spacing: 2px;">
+            <button onclick="checkPasscode()" class="btn-primary">Unlock Access ➔</button>
+            <p id="errorMessage" class="hidden" style="color: #f87171; font-size: 12px; margin-top: 12px;">❌ Bhul password! Sothik code din .</p>
+        </div>
+    </div>
+
+    <!-- MAIN APP -->
+    <div id="appSection" class="hidden">
+        <header>
+            <div class="logo-title">
+                ✉️ Gmail Generator Pro
+            </div>
+            <span class="badge">● Active</span>
+        </header>
+
+        <div class="container">
+            <!-- Controls -->
+            <div class="glass-card" style="padding: 20px;">
+                <h3 style="margin-bottom: 16px; color: #fff; border-bottom: 1px solid #1f2937; padding-bottom: 8px;">⚙️ Configuration</h3>
+                
+                <div class="form-group">
+                    <label>Email Username</label>
+                    <input type="text" id="username" value="shafirahaman43" class="input-field" placeholder="e.g. shafirahaman43">
+                </div>
+
+                <div class="form-group">
+                    <label>Domain</label>
+                    <select id="domain" class="input-field">
+                        <option value="gmail.com">gmail.com</option>
+                        <option value="googlemail.com">googlemail.com</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Generator Method</label>
+                    <div class="radio-group">
+                        <label class="radio-label">
+                            <input type="radio" name="method" value="dot" checked> Dot Trick
+                        </label>
+                        <label class="radio-label">
+                            <input type="radio" name="method" value="plus"> Plus Trick
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
+                        <label>Max Limit</label>
+                        <span id="limitVal" style="color: #60a5fa; font-weight: bold; font-size: 12px;">1000</span>
+                    </div>
+                    <input type="range" id="limit" min="10" max="5000" step="50" value="1000" style="width: 100%;" oninput="document.getElementById('limitVal').innerText = this.value">
+                </div>
+
+                <button onclick="generateEmails()" class="btn-primary">⚡ Generate Email List</button>
+            </div>
+
+            <!-- Output -->
+            <div class="glass-card" style="padding: 20px;">
+                <div class="output-header">
+                    <h3 style="color: #fff;">📋 Generated Emails (<span id="count" style="color: #60a5fa;">0</span>)</h3>
+                    <div style="display: flex; gap: 8px;">
+                        <button onclick="copyAll()" class="btn-sec">📋 Copy All</button>
+                        <button onclick="downloadTxt()" class="btn-sec">📥 Download TXT</button>
+                    </div>
+                </div>
+                <textarea id="output" readonly placeholder="Generated emails will appear here..."></textarea>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const CORRECT_PASSCODE = "190043";
+
+        function checkPasscode() {
+            const input = document.getElementById("passcodeInput").value;
+            if (input === CORRECT_PASSCODE) {
+                document.getElementById("loginSection").classList.add("hidden");
+                document.getElementById("appSection").classList.remove("hidden");
+            } else {
+                document.getElementById("errorMessage").classList.remove("hidden");
+            }
+        }
+
+        // Dot Trick Algorithm
+        function generateDots(str) {
+            let result = [];
+            let len = str.length;
+            let combinations = 1 << (len - 1);
+
+            for (let i = 0; i < combinations; i++) {
+                let temp = str[0];
+                for (let j = 0; j < len - 1; j++) {
+                    if ((i & (1 << j)) !== 0) {
+                        temp += ".";
+                    }
+                    temp += str[j + 1];
+                }
+                result.push(temp);
+            }
+            return result;
+        }
+
+        function generateEmails() {
+            let rawInput = document.getElementById("username").value.trim().toLowerCase();
+            // Clear existing dots and @gmail part if entered by user
+            let username = rawInput.split('@')[0].replace(/\./g, "");
+            const domain = document.getElementById("domain").value;
+            const method = document.querySelector('input[name="method"]:checked').value;
+            const limit = parseInt(document.getElementById("limit").value);
+
+            if (!username) {
+                alert("Please enter a valid username!");
+                return;
+            }
+
+            let list = [];
+
+            if (method === "dot") {
+                const variants = generateDots(username);
+                list = variants.map(v => `${v}@${domain}`);
+            } else {
+                for (let i = 1; i <= limit; i++) {
+                    list.push(`${username}+${i}@${domain}`);
+                }
+            }
+
+            if (list.length > limit) {
+                list = list.slice(0, limit);
+            }
+
+            document.getElementById("output").value = list.join("\n");
+            document.getElementById("count").innerText = list.length;
+        }
+
+        function copyAll() {
+            const output = document.getElementById("output");
+            if (!output.value) return;
+            output.select();
+            document.execCommand("copy");
+            alert("All emails copied to clipboard!");
+        }
+
+        function downloadTxt() {
+            const text = document.getElementById("output").value;
+            if (!text) return;
+            const blob = new Blob([text], { type: "text/plain" });
+            const anchor = document.createElement("a");
+            anchor.href = window.URL.createObjectURL(blob);
+            anchor.download = "gmail_list.txt";
+            anchor.click();
+        }
+    </script>
+</body>
+</html>
